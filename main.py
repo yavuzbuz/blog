@@ -264,7 +264,6 @@ def about():
 
 MAIL_ADDRESS = os.environ.get("EMAIL_KEY")
 MAIL_APP_PW = os.environ.get("EMAIL_SECRET_PASSWORD")
-print(MAIL_APP_PW)
 MAIL_ADDRESS_2 = os.environ.get("EMAIL_2")
 
 
@@ -285,5 +284,26 @@ def send_email(name, email, phone, message):
         connection.sendmail(from_addr=MAIL_ADDRESS, to_addrs=MAIL_ADDRESS_2, msg=email_message)
 
 
+@app.route("/users")
+def user_list():
+    """Lists all users in Flask-Login"""
+    users = User.query.all()
+    print("START")
+    for user in users:
+        db.session.delete(user)
+        print(user.email)
+        print(".")
+    return "user list in console."
+
+
+@app.route("/remove")
+def remove_user():
+    """Delete User"""
+    u = db.session.get(User, 4)
+    db.session.delete(u)
+    db.session.commit()
+    return "user removed."
+
+
 if __name__ == "__main__":
-    app.run(debug=False, port=5001)
+    app.run(debug=True, port=5001)
